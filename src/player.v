@@ -52,9 +52,12 @@ module flygoat_tt02_play_tune #( parameter MAX_COUNT = 100 ) (
     reg [1:0] db_sel_r;
     reg speaker;
 
+    reg [3:0] led_out;
+
     assign io_out[0] = speaker;
     assign io_out[1] = ~speaker;
-    assign io_out[7:2] = 6'b0;
+    assign io_out[5:2] = led_out;
+    assign io_out[7:6] = 2'bzz;
 
     always @(posedge clk) begin
 
@@ -125,5 +128,41 @@ module flygoat_tt02_play_tune #( parameter MAX_COUNT = 100 ) (
             );
         end
     endgenerate
+ 
+    reg [24:0] cnt;
+    always@(posedge clk) begin
+        if(reset) begin
+            cnt <= 25'd0;
+        // 10 khz clk, 1s led peroid
+        end else if(cnt>=(10000-1)) begin
+            cnt <= 25'd0;
+        end else begin
+            cnt <= cnt + 25'd1;
+        end
+    end
+
+    reg [1:0] led_cnt = 2'd0;
+    always@(posedge clk) begin
+        if(reset) begin
+            led_cnt <= 2'd0;
+        end else if(cnt==(10000-1)) begin
+            if(led_cnt==2'd3) led_cnt <= 2'd0;
+            else led_cnt <= led_cnt + 2'd1;
+        end
+    end
+
+    always@(*) begin
+        if (reset) begin
+            led_out = 4'b0000;
+        end else begin
+	        case(led_cnt)
+		        3'd0: led_out = 4'b1110;
+		        3'd1: led_out = 4'b1101;
+		        3'd2: led_out = 4'b1011;
+		        3'd3: led_out = 4'b0111;
+		    default: led_out = 4'b1111;
+	        endcase
+        end
+    end
 
 endmodule

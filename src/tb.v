@@ -11,8 +11,9 @@ module tb (
     input clk,
     input rst,
     input [1:0] db_sel_in,
-    output [1:0] speaker
-   );
+    output [1:0] speaker,
+    output [3:0] led_out
+    );
 
     // this part dumps the trace to a vcd file that can be viewed with GTKWave
     initial begin
@@ -25,6 +26,7 @@ module tb (
     wire [7:0] inputs = {6'b0, db_sel_in, rst, clk};
     wire [7:0] outputs;
     assign speaker = outputs[1:0];
+    assign led_out = outputs[5:2];
 
     // instantiate the DUT
     flygoat_tt02_play_tune #(.MAX_COUNT(100)) flygoat_tt02_play_tune(

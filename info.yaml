@@ -34,7 +34,7 @@ documentation:
   picture:      ""
   inputs:                 # a description of what the inputs do
     - clock
-    - reset_n
+    - reset
     - tune_sel0
     - tune_sel1
     - none
@@ -44,10 +44,10 @@ documentation:
   outputs:
     - piezo_speaker_p
     - piezo_speaker_n
-    - none
-    - none
-    - none
-    - none
+    - ledout_0
+    - ledout_1
+    - ledout_2
+    - ledout_3
     - none
     - none
 
